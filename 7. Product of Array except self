@@ -1,0 +1,60 @@
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> res;
+        vector<int> suffProd(n);
+
+        suffProd[n - 1] = nums[n - 1];
+        for(int i = n - 2;i >= 0;i--) {
+            suffProd[i] = suffProd[i + 1] * nums[i];
+        }
+
+        int pP = 1;
+        for(int i = 0;i < n;i++) {
+            int sP = i == n - 1 ? 1 : suffProd[i + 1];
+            int pExI = pP * sP;
+            res.push_back(pExI);
+
+            pP *= nums[i];
+        }
+
+        return res;
+
+    }
+};
+
+
+// another method
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int n = nums.size();
+        int overallProd = 1, cnt0 = 0;
+        for(auto num : nums) {
+            if(num == 0) cnt0++;
+            else overallProd *= num;
+        }
+
+        vector<int> res;
+        if(cnt0 == 0) {
+            for(auto num : nums) {
+                res.push_back(overallProd / num);
+            }
+        } else if(cnt0 == 1) {
+            for(auto num : nums) {
+                if(num != 0) res.push_back(0);
+                else res.push_back(overallProd);
+            }
+            
+        } else {
+            for(auto num : nums) {
+                res.push_back(0);
+            }
+        }
+
+        return res;
+
+    }
+};
